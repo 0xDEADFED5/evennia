@@ -3,7 +3,8 @@
 
 
 from django.db import migrations
-
+from django.db.models.indexes import Index
+from django.db.migrations import AddIndex
 
 def update_tags_with_dbmodel(apps, schema_editor):
 
@@ -102,8 +103,9 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name="tag", unique_together=set([("db_key", "db_category", "db_tagtype", "db_model")])
         ),
-        migrations.AlterIndexTogether(
-            name="tag", index_together=set([("db_key", "db_category", "db_tagtype", "db_model")])
-        ),
+        # migrations.AlterIndexTogether(
+        #     name="tag", index_together=set([("db_key", "db_category", "db_tagtype", "db_model")])
+        # ),
+        # AddIndex("tag", Index(fields=["db_key", "db_category", "db_tagtype", "db_model"], name="tag_index")),
         migrations.RunPython(update_tags_with_dbmodel),
     ]

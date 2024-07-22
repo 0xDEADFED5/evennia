@@ -3,6 +3,8 @@
 
 from django.conf import settings
 from django.db import migrations, models
+from django.db.models.indexes import Index
+from django.db.migrations import AddIndex
 
 import evennia.utils.picklefield
 
@@ -153,9 +155,10 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name="tag", unique_together=set([("db_key", "db_category", "db_tagtype")])
         ),
-        migrations.AlterIndexTogether(
-            name="tag", index_together=set([("db_key", "db_category", "db_tagtype")])
-        ),
+        # migrations.AlterIndexTogether(
+        #     name="tag", index_together=set([("db_key", "db_category", "db_tagtype")])
+        # ),
+        AddIndex("tag", Index(fields=["db_key", "db_category", "db_tagtype", "db_model"], name="tag_index")),
     ]
     # if we are using Oracle, we need to remove the AlterIndexTogether operation
     # since Oracle seems to create its own index already at AlterUniqueTogether, meaning
